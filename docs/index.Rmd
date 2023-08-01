@@ -1,0 +1,79 @@
+---
+title: "Spotify Top Songs of the 2010s Average BPM Visualization"
+author: "Clayton Greenwell"
+date: "2023-07-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction
+
+Though this dataset was pulled from Spotify, the top songs of the 2010s (by year) were determined by Billboard. This is Billboard's world ranking of songs for the decade, (not songs in a specific country). This dataset includes 600 songs. 
+
+Though there were many interesting tidbits of data, I've deleted most of it because many of the metrics seemed subjective or inconsistent. For example, I would have liked to have studied the average loudness of each song, but not enough context was given to this measurement for it to be reliable.
+
+The variables we're left with are the Beats Per Minute (BPM) for each song, and the year that the song was released.
+
+First I'll load the necessary packages:
+
+```{r intro}
+
+install.packages("tidyverse")
+library(tidyverse)
+
+```
+
+### Load The Dataset
+
+Next I'll load the CSV file and name it "top10s":
+
+```{r csv}
+
+read.csv("top10s.csv") -> top10s
+
+```
+
+Let's look at the fist couple rows of data so we can make sure we have the right dataset:
+
+```{r head}
+
+head(top10s)
+
+```
+
+### Fixing "Years" Column
+
+Next we'll fix the *years* column so that the data is stored as a **Date** instead of a **Number**:
+
+```{r years}
+
+top10s$year <- as.Date(paste0(top10s$year, "-01-01"))
+
+```
+
+
+
+
+### Data Visualization
+
+Let's take the average BPM of each year's songs and visualize this on a line graph across all 10 years:
+
+```{r pressure}
+ggplot(top10s, aes(x = year, y = bpm)) +
+  geom_line(stat = "summary", fun = "mean") +
+  labs(title = "Spotify Top Songs of the 2010s Average BPM (By Year)", x = "Year", y = "Average BPM")
+```
+
+
+
+
+
+### Conclusion
+
+Note that the Average BPM peaked in 2014, but then trended sharply downward for the rest of the decade. This means that toward the end of the decade, slower songs were seeing more popularity.
+
+
+
